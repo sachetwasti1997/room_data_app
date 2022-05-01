@@ -6,9 +6,11 @@ import android.util.Log
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sachet.appdataroom.databinding.ActivityMainBinding
 import com.sachet.appdataroom.db.SubscriberDatabase
 import com.sachet.appdataroom.db.SubscriberRepository
+import com.sachet.appdataroom.recycler_view.SubscriberRecyclerViewAdapter
 import com.sachet.appdataroom.view_model.SubscriberViewModel
 import com.sachet.appdataroom.view_model.SubscriberViewModelFactory
 
@@ -25,12 +27,18 @@ class MainActivity : AppCompatActivity() {
         binding.myViewModal = subscriberViewModal
         binding.lifecycleOwner = this
         Log.i("TAG", "onCreate: ${binding.nameInput.text}")
+        initRecyclerView()
+    }
+
+    private fun initRecyclerView(){
+        binding.subscriberRecyclerView.layoutManager = LinearLayoutManager(this)
         displayList()
     }
 
     private fun displayList(){
         subscriberViewModal.subscribersList.observe(this, Observer {
             Log.i("TAGRECYCLER", "displayList: ${it.toString()}")
+            binding.subscriberRecyclerView.adapter = SubscriberRecyclerViewAdapter(it)
         })
     }
 
