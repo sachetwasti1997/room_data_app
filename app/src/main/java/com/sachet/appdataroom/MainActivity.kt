@@ -3,11 +3,13 @@ package com.sachet.appdataroom
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sachet.appdataroom.databinding.ActivityMainBinding
+import com.sachet.appdataroom.db.Subscriber
 import com.sachet.appdataroom.db.SubscriberDatabase
 import com.sachet.appdataroom.db.SubscriberRepository
 import com.sachet.appdataroom.recycler_view.SubscriberRecyclerViewAdapter
@@ -36,10 +38,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayList(){
-        subscriberViewModal.subscribersList.observe(this, Observer {
+        subscriberViewModal.subscribersList.observe(this, Observer { it ->
             Log.i("TAGRECYCLER", "displayList: ${it.toString()}")
-            binding.subscriberRecyclerView.adapter = SubscriberRecyclerViewAdapter(it)
+            binding.subscriberRecyclerView.adapter = SubscriberRecyclerViewAdapter(it){subscriber ->
+                clickListener(subscriber)
+            }
         })
+    }
+
+    private fun clickListener(subscriber: Subscriber){
+        Toast.makeText(this, "selected name is ${subscriber.name}", Toast.LENGTH_LONG).show()
+        subscriberViewModal.setUpdateDeleteTextView(subscriber)
     }
 
 }
